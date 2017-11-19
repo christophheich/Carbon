@@ -11,36 +11,59 @@ namespace Snowdrop.util
     class CompressionUtil
     {
         // Method for compressing files.
-        public static void Compress(FileInfo fileToCompress, string rootFolder)
+        public static void Compress(FileInfo fileToCompress, string baseFolder)
         {
             try
             {
-                //just for testing, needs to be rewritten
-                using (FileStream originalFileStream = fileToCompress.OpenRead())
+                // open the file as a file stream
+                // that need to be compressed
+                using (FileStream fileStream = fileToCompress.OpenRead())
                 {
-                    if (File.GetAttributes(fileToCompress.FullName).HasFlag(FileAttributes.Hidden) & fileToCompress.Extension != ".gz")
+                    // if the file is not hidden and has not the 
+                    // compression file extension (e.g. ".gz")
+                    // go on and compress the file
+                    if (!File.GetAttributes(fileToCompress.FullName).HasFlag(FileAttributes.Hidden) & fileToCompress.Extension != Configuration.COMPRESSION_FORMAT)
                     {
-                        if (!Directory.Exists(rootFolder + "\\temporary"))
+                        // create a temporary directory if it does not exist
+                        DirectoryUtil.CreateDirectory(baseFolder + @"\" + Configuration.TEMP_FOLDER_NAME);
+
+                        // generate a md5 checksum and append it to 
+                        // the filename and the path seperated by a ";"
+                        // e.g. "Snowdrop.exe;aeb23baef889c3cb0b759c46aa2d428c"
+                        using (StreamWriter streamWriter = File.AppendText(baseFolder + @"\" + Configuration.TEMP_FOLDER_NAME + @"\" + Configuration.CHECKSUM_NAME))
                         {
-                            Directory.CreateDirectory(rootFolder + "\\temporary");
-                        }
-                        using (StreamWriter sw = File.AppendText(rootFolder + "\\temporary\\checksum"))
-                        {
-                            sw.WriteLine(fileToCompress.FullName.Replace(rootFolder, "") + ";" + CryptographyUtil.Md5(File.ReadAllBytes(fileToCompress.FullName)));
+                            // replace the baseFolder from the path
+                            // we do not want an absolute path
+                            // TODO: transfer into checksum util and add 
+                            // function to replace a already set md5 with a
+                            // new one generated 
+                            streamWriter.WriteLine(fileToCompress.FullName.Replace(baseFolder, "") + ";" + CryptographyUtil.Md5(File.ReadAllBytes(fileToCompress.FullName)));
                         }
 
-                        Directory.CreateDirectory(rootFolder + "\\temporary\\" + fileToCompress.FullName.Replace(rootFolder, "").Replace(fileToCompress.Name, ""));
-                        using (FileStream compressedFileStream = File.Create(rootFolder + "\\temporary\\" + fileToCompress.FullName.Replace(rootFolder, "") + ".gz"))
+                        // create the sub-directory in the temp folder 
+                        // if it does not exist
+                        DirectoryUtil.CreateDirectory(baseFolder + @"\" + Configuration.TEMP_FOLDER_NAME + @"\" + fileToCompress.FullName.Replace(baseFolder, "").Replace(fileToCompress.Name, ""));
+
+                        // create the file in the location of the base 
+                        // folder + temp folder + the file name, again we
+                        // need to replace the base path to append it after the
+                        // temp folder in order to prevent an absolute path at the end
+                        // append the compressed file extension
+                        using (FileStream compressedFileStream = File.Create(baseFolder + @"\" + Configuration.TEMP_FOLDER_NAME + @"\" + fileToCompress.FullName.Replace(baseFolder, "") + Configuration.COMPRESSION_FORMAT))
                         {
+                            // compress the file
                             using (GZipStream compressionStream = new GZipStream(compressedFileStream, CompressionMode.Compress))
                             {
                                 // copy the file of the 
                                 // stream to the specified location
-                                originalFileStream.CopyTo(compressionStream);
-                                FileInfo fileCompressed = new FileInfo(rootFolder + "\\temporary\\" + fileToCompress.FullName.Replace(rootFolder, "") + ".gz");
-                                Console.WriteLine("Compressed {0} from {1} to {2} bytes.", fileToCompress.Name, fileToCompress.Length.ToString(), fileCompressed.Length.ToString());
+                                fileStream.CopyTo(compressionStream);
                                 LoggingUtil.Info(String.Format("Compressed: {0}", fileToCompress.FullName));
                             }
+
+                            // just some not explicit needed information
+                            // reduced size info after the compression ...
+                            FileInfo fileInfo = new FileInfo(baseFolder + @"\" + Configuration.TEMP_FOLDER_NAME + @"\" + fileToCompress.FullName.Replace(baseFolder, "") + Configuration.COMPRESSION_FORMAT);
+                            Console.WriteLine("Compressed {0} from {1} to {2} bytes.", fileToCompress.Name, fileToCompress.Length.ToString(), fileInfo.Length.ToString());
                         }
                     }
                 }
@@ -75,7 +98,7 @@ namespace Snowdrop.util
                         // decompress the file
                         using (GZipStream decompressionStream = new GZipStream(decompressFileStream, CompressionMode.Decompress))
                         {
-                            // copy the file of the 
+                            // copy the decompressed file of the 
                             // stream to the specified location
                             decompressionStream.CopyTo(decompressedFileStream);
                             LoggingUtil.Info(String.Format("Decompressed: {0}", fileToDecompress.FullName));

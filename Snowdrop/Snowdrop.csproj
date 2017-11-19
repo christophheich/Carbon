@@ -64,10 +64,13 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Configuration.cs" />
+    <Compile Include="ext\StringExtension.cs" />
+    <Compile Include="json\ConfigurationJsonModel.cs" />
     <Compile Include="util\ChecksumUtil.cs" />
     <Compile Include="util\CompressionUtil.cs" />
     <Compile Include="util\ConfigurationUtil.cs" />
     <Compile Include="util\CryptographyUtil.cs" />
+    <Compile Include="util\DirectoryUtil.cs" />
     <Compile Include="util\LocalizationUtil.cs" />
     <Compile Include="util\LoggingUtil.cs" />
     <Page Include="MainWindow.xaml">

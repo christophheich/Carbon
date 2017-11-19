@@ -1,14 +1,23 @@
-﻿using System;
+﻿// Snowdrop - Download, Install and Update
+// Copyright (c) 2017 Christoph Heich
+// See the LICENSE file in the project root for more information.
+
+using System;
 using System.IO;
 
 namespace Snowdrop.util
 {
     class LoggingUtil
     {
-        // Append each log event into the log file specified.
+        // Append each log event into the log file specified
+        // NOTE: we delete the log file each time the program starts
+        // the code for deletion is within the App.xaml code
         private static void Writer(string type, string message)
         {
-            using (StreamWriter streamWriter = File.AppendText(Configuration.SETTINGS_SAVE_PATH + "/update.log"))
+            // if the appdata dir does not exist create it
+            DirectoryUtil.CreateDirectory(Configuration.APPDATA_PATH);
+
+            using (StreamWriter streamWriter = File.AppendText(Configuration.APPDATA_PATH + "/" + Configuration.LOG_NAME))
             {
                 streamWriter.WriteLine(DateTime.Now.ToString("d/M/yyyy HH:mm:ss ") + type + message);
             }

@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿// Snowdrop - Download, Install and Update
+// Copyright (c) 2017 Christoph Heich
+// See the LICENSE file in the project root for more information.
 
 namespace Snowdrop.util
 {

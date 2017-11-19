@@ -2,7 +2,9 @@
 // Copyright (c) 2017 Christoph Heich
 // See the LICENSE file in the project root for more information.
 
+using Snowdrop.util;
 using System;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows;
 
@@ -28,6 +30,9 @@ namespace Snowdrop
          */
         private void Application_Startup(object sender, StartupEventArgs e)
         {
+            // Check if the log file exist if so delete it
+            DirectoryUtil.DeleteFile(Configuration.APPDATA_PATH + @"\" + Configuration.LOG_NAME);
+
             // if there are arguments specified
             if (e.Args.Length >= 1)
             {
