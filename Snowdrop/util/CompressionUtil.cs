@@ -5,7 +5,6 @@
 using System;
 using System.IO;
 using System.IO.Compression;
-using System.Text.RegularExpressions;
 
 namespace Snowdrop.util
 {
@@ -26,38 +25,38 @@ namespace Snowdrop.util
                     if (!File.GetAttributes(fileToCompress.FullName).HasFlag(FileAttributes.Hidden) & fileToCompress.Extension != Configuration.COMPRESSION_FORMAT)
                     {
                         // create a temporary directory if it does not exist
-                        DirectoryUtil.CreateDirectory(baseFolder + @"\" + Configuration.TEMP_FOLDER_NAME);
+                        DirectoryUtil.CreateDirectory(Path.Combine(baseFolder, Configuration.TEMP_FOLDER_NAME));
 
-//                        if (File.Exists(baseFolder + @"\" + Configuration.TEMP_FOLDER_NAME + @"\" + Configuration.CHECKSUM_NAME) && Regex.IsMatch(File.ReadAllText(baseFolder + @"\" + Configuration.TEMP_FOLDER_NAME + @"\" + Configuration.CHECKSUM_NAME), fileToCompress.FullName.Replace(baseFolder, "") + ";" + ".*"))
-//                        {
-//                            File.WriteAllText(baseFolder + @"\" + Configuration.TEMP_FOLDER_NAME + @"\" + Configuration.CHECKSUM_NAME, Regex.Replace(File.ReadAllText(baseFolder + @"\" + Configuration.TEMP_FOLDER_NAME + @"\" + Configuration.CHECKSUM_NAME), fileToCompress.FullName.Replace(baseFolder, "") + ";" + ".*", fileToCompress.FullName.Replace(baseFolder, "") + ";" + CryptographyUtil.Md5(File.ReadAllBytes(fileToCompress.FullName))));
-//                        }
-//                        else
-//                        {
-                            // generate a md5 checksum and append it to 
-                            // the filename and the path seperated by a ";"
-                            // e.g. "Snowdrop.exe;aeb23baef889c3cb0b759c46aa2d428c"
-                            using (StreamWriter streamWriter = File.AppendText(baseFolder + @"\" + Configuration.TEMP_FOLDER_NAME + @"\" + Configuration.CHECKSUM_NAME))
-                            {
-                                // replace the baseFolder from the path
-                                // we do not want an absolute path
-                                // TODO: transfer into checksum util and add 
-                                // function to replace a already set md5 with a
-                                // new one generated 
-                                streamWriter.WriteLine(fileToCompress.FullName.Replace(baseFolder, "") + ";" + CryptographyUtil.Md5(File.ReadAllBytes(fileToCompress.FullName)));
-                            }
-//                        }
+                        //if (File.Exists(Path.Combine(baseFolder, Configuration.TEMP_FOLDER_NAME, Configuration.CHECKSUM_NAME)) && Regex.IsMatch(File.ReadAllText(Path.Combine(baseFolder, Configuration.TEMP_FOLDER_NAME, Configuration.CHECKSUM_NAME)), fileToCompress.FullName.Replace(baseFolder, "") + ";" + ".*"))
+                        //{
+                        //    File.WriteAllText(baseFolder + @"\" + Configuration.TEMP_FOLDER_NAME + @"\" + Configuration.CHECKSUM_NAME, Regex.Replace(File.ReadAllText(baseFolder + @"\" + Configuration.TEMP_FOLDER_NAME + @"\" + Configuration.CHECKSUM_NAME), fileToCompress.FullName.Replace(baseFolder, "") + ";" + ".*", fileToCompress.FullName.Replace(baseFolder, "") + ";" + CryptographyUtil.Md5(File.ReadAllBytes(fileToCompress.FullName))));
+                        //}
+                        //else
+                        //{
+                        // generate a md5 checksum and append it to 
+                        // the filename and the path seperated by a ";"
+                        // e.g. "Snowdrop.exe;aeb23baef889c3cb0b759c46aa2d428c"
+                        using (StreamWriter streamWriter = File.AppendText(Path.Combine(baseFolder, Configuration.TEMP_FOLDER_NAME, Configuration.CHECKSUM_NAME)))
+                        {
+                            // replace the baseFolder from the path
+                            // we do not want an absolute path
+                            // TODO: transfer into checksum util and add 
+                            // function to replace a already set md5 with a
+                            // new one generated 
+                            streamWriter.WriteLine(fileToCompress.FullName.Replace(baseFolder, "") + ";" + CryptographyUtil.Md5(File.ReadAllBytes(fileToCompress.FullName)));
+                        }
+                        //}
 
                         // create the sub-directory in the temp folder 
                         // if it does not exist
-                        DirectoryUtil.CreateDirectory(baseFolder + @"\" + Configuration.TEMP_FOLDER_NAME + @"\" + fileToCompress.FullName.Replace(baseFolder, "").Replace(fileToCompress.Name, ""));
+                        DirectoryUtil.CreateDirectory(Path.Combine(baseFolder, Configuration.TEMP_FOLDER_NAME + fileToCompress.FullName.Replace(baseFolder, "").Replace(fileToCompress.Name, "")));
 
                         // create the file in the location of the base 
                         // folder + temp folder + the file name, again we
                         // need to replace the base path to append it after the
                         // temp folder in order to prevent an absolute path at the end
                         // append the compressed file extension
-                        using (FileStream compressedFileStream = File.Create(baseFolder + @"\" + Configuration.TEMP_FOLDER_NAME + @"\" + fileToCompress.FullName.Replace(baseFolder, "") + Configuration.COMPRESSION_FORMAT))
+                        using (FileStream compressedFileStream = File.Create(Path.Combine(baseFolder, Configuration.TEMP_FOLDER_NAME + fileToCompress.FullName.Replace(baseFolder, "") + Configuration.COMPRESSION_FORMAT)))
                         {
                             // compress the file
                             using (GZipStream compressionStream = new GZipStream(compressedFileStream, CompressionMode.Compress))
@@ -70,7 +69,7 @@ namespace Snowdrop.util
 
                             // just some not explicit needed information
                             // reduced size info after the compression ...
-                            FileInfo fileInfo = new FileInfo(baseFolder + @"\" + Configuration.TEMP_FOLDER_NAME + @"\" + fileToCompress.FullName.Replace(baseFolder, "") + Configuration.COMPRESSION_FORMAT);
+                            FileInfo fileInfo = new FileInfo(Path.Combine(baseFolder, Configuration.TEMP_FOLDER_NAME + fileToCompress.FullName.Replace(baseFolder, "") + Configuration.COMPRESSION_FORMAT));
                             Console.WriteLine("Compressed {0} from {1} to {2} bytes.", fileToCompress.Name, fileToCompress.Length.ToString(), fileInfo.Length.ToString());
                         }
                     }

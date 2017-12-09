@@ -22,7 +22,7 @@ namespace Snowdrop.util
                 // read the json file and deserialize it
                 // save the content of each json value into
                 // the ConfigurationJsonModel
-                ConfigurationJsonModel = JsonConvert.DeserializeObject<ConfigurationJsonModel>(File.ReadAllText(Configuration.APPDATA_PATH + @"\" + Configuration.JSON_NAME));
+                ConfigurationJsonModel = JsonConvert.DeserializeObject<ConfigurationJsonModel>(File.ReadAllText(Path.Combine(Configuration.APPDATA_PATH, Configuration.JSON_NAME)));
             }
             catch (Exception ex)
             {
@@ -42,7 +42,7 @@ namespace Snowdrop.util
 
             // serialize the content to the json format
             // write it as a file into the appdata path
-            File.WriteAllText(Configuration.APPDATA_PATH + @"\" + Configuration.JSON_NAME, JsonConvert.SerializeObject(ConfigurationJsonModel));
+            File.WriteAllText(Path.Combine(Configuration.APPDATA_PATH, Configuration.JSON_NAME), JsonConvert.SerializeObject(ConfigurationJsonModel));
         }
     }
 }

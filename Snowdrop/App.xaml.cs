@@ -3,9 +3,11 @@
 // See the LICENSE file in the project root for more information.
 
 using Snowdrop.util;
+using Squirrel;
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace Snowdrop
@@ -28,19 +30,45 @@ namespace Snowdrop
          * specified the application will start in user mode to download and 
          * update files.
          */
-        private void Application_Startup(object sender, StartupEventArgs e)
+        private void Application_Startup(object sender, StartupEventArgs startupEventArgs)
         {
-            // Check if the log file exist if so delete it
-            DirectoryUtil.DeleteFile(Configuration.APPDATA_PATH + @"\" + Configuration.LOG_NAME);
+            // run the squirrel update process async in the background
+            Task.Run(async () =>
+            {
+                // Initialize Squirrel Update
+                if (Configuration.GITHUB_UPDATE_MANAGER == true)
+                {
+                    using (var mgr = UpdateManager.GitHubUpdateManager(Configuration.GITHUB_UPDATE_MANAGER_URL))
+                    {
+                        await mgr.Result.UpdateApp();
+                    }
+                }
+                else
+                {
+                    using (var mgr = new UpdateManager(Configuration.UPDATE_MANAGER_URL))
+                    {
+                        await mgr.UpdateApp();
+                    }
+                }
+            }).GetAwaiter().GetResult();
 
-            // if there are arguments specified
-            if (e.Args.Length >= 1)
+
+            // if the log file should be deleted on application startup
+            if (Configuration.DELETE_LOG_FILE == true)
+            {
+                // Check if the log file exist if so delete it
+                DirectoryUtil.DeleteFile(Path.Combine(Configuration.APPDATA_PATH, Configuration.LOG_NAME));
+            }
+            
+
+            // if there are arguments specified and it does not containt --squirrel
+            if (startupEventArgs.Args.Length >= 1 && !startupEventArgs.Args[0].Contains("--squirrel"))
             {
                 // Allocates a new console for the calling process.
                 AllocConsole();
 
                 // Call the method "Program" of the Static class ConsoleWindow.
-                ConsoleWindow.Program(e);
+                ConsoleWindow.Program(startupEventArgs);
 
                 // Detaches the calling process from its console.
                 FreeConsole();

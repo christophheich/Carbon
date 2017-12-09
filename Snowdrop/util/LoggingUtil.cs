@@ -14,38 +14,46 @@ namespace Snowdrop.util
         // the code for deletion is within the App.xaml code
         private static void Writer(string type, string message)
         {
-            // if the appdata dir does not exist create it
-            DirectoryUtil.CreateDirectory(Configuration.APPDATA_PATH);
-
-            using (StreamWriter streamWriter = File.AppendText(Configuration.APPDATA_PATH + "/" + Configuration.LOG_NAME))
+            if (Configuration.LOG_ENABLED == true)
             {
-                streamWriter.WriteLine(DateTime.Now.ToString("d/M/yyyy HH:mm:ss ") + type + message);
+                // if the appdata dir does not exist create it
+                DirectoryUtil.CreateDirectory(Configuration.APPDATA_PATH);
+
+                using (StreamWriter streamWriter = File.AppendText(Path.Combine(Configuration.APPDATA_PATH, Configuration.LOG_NAME)))
+                {
+                    streamWriter.WriteLine(DateTime.Now.ToString("d/M/yyyy HH:mm:ss ") + type + message);
+                }
             }
-        }
-
-        public static void Info(string info)
-        {
-            Writer("[Info]: ", info);
-        }
-
-        public static void Debug(string debug)
-        {
-            Writer("[Debug]: ", debug);
         }
 
         public static void Exception(string exception)
         {
-            Writer("[Exception]: ", exception);
+            Writer("[EXCEPTION]: ", exception);
         }
 
         public static void Error(string error)
         {
-            Writer("[Error]: ", error);
+            Writer("[ERROR]: ", error);
         }
 
         public static void Warning(string warning)
         {
-            Writer("[Warning]: ", warning);
+            Writer("[WARNING]: ", warning);
+        }
+
+        public static void Info(string info)
+        {
+            Writer("[INFO]: ", info);
+        }
+
+        public static void Debug(string debug)
+        {
+            Writer("[DEBUG]: ", debug);
+        }
+
+        public static void Trace(string trace)
+        {
+            Writer("[TRACE]: ", trace);
         }
     }
 }

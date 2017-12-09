@@ -6,5 +6,7 @@ namespace Snowdrop.json
 {
     class WebspaceJsonModel
     {
+        public string APPLICATION_VERSION { get; set; }
+        public string UPDATE_VERSION { get; set; }
     }
 }

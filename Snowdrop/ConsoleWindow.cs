@@ -48,6 +48,7 @@ namespace Snowdrop
                 else
                 {
                     Console.WriteLine("===================== File ======================");
+
                     // If the flag is a file compress only the 
                     // file and not the full directory.
                     CompressionUtil.Compress(new FileInfo(directoryInfo.FullName), directoryInfo.FullName.Remove(directoryInfo.FullName.Length - directoryInfo.Name.Length));

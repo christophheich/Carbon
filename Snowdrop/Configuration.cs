@@ -10,16 +10,37 @@ namespace Snowdrop
     class Configuration
     {
         // ----------------------------
+        //       SQUIRREL UPDATER
+        // ----------------------------
+
+        // Using GitHubUpdateManager?
+        public const bool GITHUB_UPDATE_MANAGER = false;
+
+        // Make sure your url doesn't end in a forward slash ("/").
+        public const string GITHUB_UPDATE_MANAGER_URL = @"https://github.com/myuser/myapp";
+
+        // Only if GITHUB_UPDATE_MANAGER is 'false' we are then using local or own HTTP/S.
+        public const string UPDATE_MANAGER_URL = @"I:\Snowdrop\Snowdrop\Releases";
+
+
+        // ----------------------------
         //       LOCALIZATION
         // ----------------------------
         public static readonly string[] LANGUAGES = { "enu", "deu", "fra", "plk", "rus" };
 
 
-
         // ----------------------------
         //             LOG
         // ----------------------------
-        public const string LOG_NAME = "update.log";
+
+        // Enable logging?
+        public const bool LOG_ENABLED = true;
+
+        // Delete log file on application start?
+        public const bool DELETE_LOG_FILE = true;
+
+        // Name of the log file.
+        public const string LOG_NAME = "application.log";
 
 
 
@@ -32,22 +53,18 @@ namespace Snowdrop
 
 
         // ----------------------------
-        //    TODO: USING SQUIRREL?
-        // ----------------------------
-        public const string UPGRADE_BASE = @"http://download.localhost/Snowdrop.exe";
-
-
-
-        // ----------------------------
         //       APPDATA PATH
         // ----------------------------
-        public static string APPDATA_PATH = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Snowdrop");
+        public static string APPDATA_PATH = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Snowdrop");
 
 
 
         // ----------------------------
         //       COMPRESSION
         // ----------------------------
+
+        // this will not change the compression itself
+        // buz you can use it to customize your files for example .snowdrop
         public const string COMPRESSION_FORMAT = ".gz";
 
 
