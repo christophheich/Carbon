@@ -2,7 +2,9 @@
 // Copyright (c) 2017 Christoph Heich
 // See the LICENSE file in the project root for more information.
 
+using Snowdrop.lib;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 
@@ -10,9 +12,50 @@ namespace Snowdrop.util
 {
     class CompressionUtil
     {
+        private static Dictionary<string, string> checksumElements = new Dictionary<string, string>();
+        private static AtomicBoolean checksumCreated = new AtomicBoolean() { Value = false };
+
+        public static void WriteFile(string baseFolder)
+        {
+            // Delete the file as we read it already and now write a new one
+            DirectoryUtil.DeleteFile(Path.Combine(baseFolder, Configuration.TEMP_FOLDER_NAME, Configuration.CHECKSUM_NAME));
+
+            using (StreamWriter streamWriter = File.AppendText(Path.Combine(baseFolder, Configuration.TEMP_FOLDER_NAME, Configuration.CHECKSUM_NAME)))
+            {
+                // replace the baseFolder from the path
+                // we do not want an absolute path
+                foreach (var element in checksumElements)
+                {
+                    //write every element e.g. Snowdrop.exe;4243342342341sdf
+                    streamWriter.WriteLine(element.Key + ";" + element.Value); 
+                }
+            }
+        }
+
         // Method for compressing files.
         public static void Compress(FileInfo fileToCompress, string baseFolder)
         {
+            // atomic boolean if the value of 
+            // checksumcreated is false set it to true and continue
+            if (checksumCreated.CompareAndExchange(false, true))
+            {
+                // if the file does exist read the content
+                if (File.Exists(Path.Combine(baseFolder, Configuration.TEMP_FOLDER_NAME, Configuration.CHECKSUM_NAME)))
+                {
+                    using (var streamReader = new StreamReader(Path.Combine(baseFolder, Configuration.TEMP_FOLDER_NAME, Configuration.CHECKSUM_NAME)))
+                    {
+                        String line;
+                        while ((line = streamReader.ReadLine()) != null)
+                        {
+                            // spereate the line by ; to get the path and md5
+                            // add it afterwards to the dictionary
+                            string[] separation = line.Split(';');
+                            checksumElements.Add(separation[0], separation[1]);
+                        }
+                    }
+                }
+            }
+
             try
             {
                 // open the file as a file stream
@@ -22,30 +65,32 @@ namespace Snowdrop.util
                     // if the file is not hidden and has not the 
                     // compression file extension (e.g. ".gz")
                     // go on and compress the file
-                    if (!File.GetAttributes(fileToCompress.FullName).HasFlag(FileAttributes.Hidden) & fileToCompress.Extension != Configuration.COMPRESSION_FORMAT)
+                    if (!File.GetAttributes(fileToCompress.FullName).HasFlag(FileAttributes.Hidden) & !fileToCompress.DirectoryName.Contains(Configuration.TEMP_FOLDER_NAME))
                     {
                         // create a temporary directory if it does not exist
                         DirectoryUtil.CreateDirectory(Path.Combine(baseFolder, Configuration.TEMP_FOLDER_NAME));
 
-                        //if (File.Exists(Path.Combine(baseFolder, Configuration.TEMP_FOLDER_NAME, Configuration.CHECKSUM_NAME)) && Regex.IsMatch(File.ReadAllText(Path.Combine(baseFolder, Configuration.TEMP_FOLDER_NAME, Configuration.CHECKSUM_NAME)), fileToCompress.FullName.Replace(baseFolder, "") + ";" + ".*"))
-                        //{
-                        //    File.WriteAllText(baseFolder + @"\" + Configuration.TEMP_FOLDER_NAME + @"\" + Configuration.CHECKSUM_NAME, Regex.Replace(File.ReadAllText(baseFolder + @"\" + Configuration.TEMP_FOLDER_NAME + @"\" + Configuration.CHECKSUM_NAME), fileToCompress.FullName.Replace(baseFolder, "") + ";" + ".*", fileToCompress.FullName.Replace(baseFolder, "") + ";" + CryptographyUtil.Md5(File.ReadAllBytes(fileToCompress.FullName))));
-                        //}
-                        //else
-                        //{
-                        // generate a md5 checksum and append it to 
-                        // the filename and the path seperated by a ";"
-                        // e.g. "Snowdrop.exe;aeb23baef889c3cb0b759c46aa2d428c"
-                        using (StreamWriter streamWriter = File.AppendText(Path.Combine(baseFolder, Configuration.TEMP_FOLDER_NAME, Configuration.CHECKSUM_NAME)))
-                        {
-                            // replace the baseFolder from the path
-                            // we do not want an absolute path
-                            // TODO: transfer into checksum util and add 
-                            // function to replace a already set md5 with a
-                            // new one generated 
-                            streamWriter.WriteLine(fileToCompress.FullName.Replace(baseFolder, "") + ";" + CryptographyUtil.Md5(File.ReadAllBytes(fileToCompress.FullName)));
+                        // path for the dictionary key
+                        string key = fileToCompress.FullName.Replace(baseFolder, "");
+
+                        // generate the md5 of the file
+                        string hashValue = CryptographyUtil.Md5(File.ReadAllBytes(fileToCompress.FullName));
+
+                        // try to get the value of path (key) and set it to the variable valueKey
+                        // check if the value of the key is not equal to the md5 if so
+                        // delete the value from the dictionary and set the new one
+                        if (checksumElements.TryGetValue(key, out string valueKey)) {
+                            if (valueKey != hashValue)
+                            {
+                                checksumElements.Remove(key);
+                                checksumElements.Add(key, hashValue);
+                            }
                         }
-                        //}
+                        else 
+                        {
+                            // if there is no key just add the key and value
+                            checksumElements.Add(key, hashValue);
+                        }
 
                         // create the sub-directory in the temp folder 
                         // if it does not exist

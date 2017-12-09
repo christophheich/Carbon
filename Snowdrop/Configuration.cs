@@ -72,8 +72,8 @@ namespace Snowdrop
         // ----------------------------
         //       TEMP
         // ----------------------------
-        public const string TEMP_FOLDER_NAME = "temp";
-        public const string CHECKSUM_NAME = "checksum";
+        public const string TEMP_FOLDER_NAME = "APPLICATION_TEMP_FOLDER";
+        public const string CHECKSUM_NAME = "checksum.txt";
         public const string JSON_NAME = "setting.json";
         
     }

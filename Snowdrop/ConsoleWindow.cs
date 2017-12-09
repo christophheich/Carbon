@@ -36,7 +36,7 @@ namespace Snowdrop
                 // If it is not a directory handle it as a file.
                 if (File.GetAttributes(directoryInfo.FullName).HasFlag(FileAttributes.Directory))
                 {
-                    Console.WriteLine("=================== Directory ====================");
+                    Console.WriteLine("=================== Directory ===================="); 
 
                     // Loop through every directory within the root directory
                     // check if it is a file and compress the file.
@@ -44,6 +44,9 @@ namespace Snowdrop
                     {
                         CompressionUtil.Compress(new FileInfo(fileInfo.FullName), e.Args[0]);
                     }
+
+                    // write the checksum file to the drive
+                    CompressionUtil.WriteFile(e.Args[0]);
                 }
                 else
                 {
@@ -51,7 +54,12 @@ namespace Snowdrop
 
                     // If the flag is a file compress only the 
                     // file and not the full directory.
-                    CompressionUtil.Compress(new FileInfo(directoryInfo.FullName), directoryInfo.FullName.Remove(directoryInfo.FullName.Length - directoryInfo.Name.Length));
+                    // -1 as this is a file we do not want 
+                    // to remove one slash (/) of the directory
+                    CompressionUtil.Compress(new FileInfo(directoryInfo.FullName), directoryInfo.FullName.Remove(directoryInfo.FullName.Length - directoryInfo.Name.Length - 1));
+                    
+                    // write the checksum file to the drive
+                    CompressionUtil.WriteFile(directoryInfo.FullName.Remove(directoryInfo.FullName.Length - directoryInfo.Name.Length - 1));
                 }
             }
             catch (FileNotFoundException ex)
