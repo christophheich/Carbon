@@ -6,9 +6,11 @@ namespace Snowdrop.json
 {
     class ConfigurationJsonModel
     {
-        public string BaseDirectoryPath { get; set; }
-        public string Language { get; set; }
-        public string Version { get; set; }
-        public string Update { get; set; }
+        public string BASE_DIRECTORY_PATH { get; set; }
+        public string SNOWDROP_VERSION { get; set; }
+        public string UPDATE_VERSION { get; set; }
+        public string LANGUAGE { get; set; }
+        //public string PASSWORD { get; set; }
+        //public string NAME { get; set; }
     }
 }

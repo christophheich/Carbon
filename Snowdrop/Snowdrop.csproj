@@ -66,6 +66,7 @@
     <Compile Include="Configuration.cs" />
     <Compile Include="ext\StringExtension.cs" />
     <Compile Include="json\ConfigurationJsonModel.cs" />
+    <Compile Include="json\WebspaceJsonModel.cs" />
     <Compile Include="util\ChecksumUtil.cs" />
     <Compile Include="util\CompressionUtil.cs" />
     <Compile Include="util\ConfigurationUtil.cs" />

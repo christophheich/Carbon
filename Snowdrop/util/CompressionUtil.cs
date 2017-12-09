@@ -5,6 +5,7 @@
 using System;
 using System.IO;
 using System.IO.Compression;
+using System.Text.RegularExpressions;
 
 namespace Snowdrop.util
 {
@@ -27,18 +28,25 @@ namespace Snowdrop.util
                         // create a temporary directory if it does not exist
                         DirectoryUtil.CreateDirectory(baseFolder + @"\" + Configuration.TEMP_FOLDER_NAME);
 
-                        // generate a md5 checksum and append it to 
-                        // the filename and the path seperated by a ";"
-                        // e.g. "Snowdrop.exe;aeb23baef889c3cb0b759c46aa2d428c"
-                        using (StreamWriter streamWriter = File.AppendText(baseFolder + @"\" + Configuration.TEMP_FOLDER_NAME + @"\" + Configuration.CHECKSUM_NAME))
-                        {
-                            // replace the baseFolder from the path
-                            // we do not want an absolute path
-                            // TODO: transfer into checksum util and add 
-                            // function to replace a already set md5 with a
-                            // new one generated 
-                            streamWriter.WriteLine(fileToCompress.FullName.Replace(baseFolder, "") + ";" + CryptographyUtil.Md5(File.ReadAllBytes(fileToCompress.FullName)));
-                        }
+//                        if (File.Exists(baseFolder + @"\" + Configuration.TEMP_FOLDER_NAME + @"\" + Configuration.CHECKSUM_NAME) && Regex.IsMatch(File.ReadAllText(baseFolder + @"\" + Configuration.TEMP_FOLDER_NAME + @"\" + Configuration.CHECKSUM_NAME), fileToCompress.FullName.Replace(baseFolder, "") + ";" + ".*"))
+//                        {
+//                            File.WriteAllText(baseFolder + @"\" + Configuration.TEMP_FOLDER_NAME + @"\" + Configuration.CHECKSUM_NAME, Regex.Replace(File.ReadAllText(baseFolder + @"\" + Configuration.TEMP_FOLDER_NAME + @"\" + Configuration.CHECKSUM_NAME), fileToCompress.FullName.Replace(baseFolder, "") + ";" + ".*", fileToCompress.FullName.Replace(baseFolder, "") + ";" + CryptographyUtil.Md5(File.ReadAllBytes(fileToCompress.FullName))));
+//                        }
+//                        else
+//                        {
+                            // generate a md5 checksum and append it to 
+                            // the filename and the path seperated by a ";"
+                            // e.g. "Snowdrop.exe;aeb23baef889c3cb0b759c46aa2d428c"
+                            using (StreamWriter streamWriter = File.AppendText(baseFolder + @"\" + Configuration.TEMP_FOLDER_NAME + @"\" + Configuration.CHECKSUM_NAME))
+                            {
+                                // replace the baseFolder from the path
+                                // we do not want an absolute path
+                                // TODO: transfer into checksum util and add 
+                                // function to replace a already set md5 with a
+                                // new one generated 
+                                streamWriter.WriteLine(fileToCompress.FullName.Replace(baseFolder, "") + ";" + CryptographyUtil.Md5(File.ReadAllBytes(fileToCompress.FullName)));
+                            }
+//                        }
 
                         // create the sub-directory in the temp folder 
                         // if it does not exist

@@ -10,25 +10,47 @@ namespace Snowdrop
     class Configuration
     {
         // ----------------------------
-        //       Update Base URL
+        //       LOCALIZATION
+        // ----------------------------
+        public static readonly string[] LANGUAGES = { "enu", "deu", "fra", "plk", "rus" };
+
+
+
+        // ----------------------------
+        //             LOG
+        // ----------------------------
+        public const string LOG_NAME = "update.log";
+
+
+
+        // ----------------------------
+        //       UPDATE BASE URL
         // ----------------------------
         public const string UPDATE_BASE = @"http://download.localhost/";
         public const string UPDATE_FILE_BASE = @"http://download.localhost/client/";
+
+
 
         // ----------------------------
         //    TODO: USING SQUIRREL?
         // ----------------------------
         public const string UPGRADE_BASE = @"http://download.localhost/Snowdrop.exe";
 
+
+
         // ----------------------------
-        //       AppData Path
+        //       APPDATA PATH
         // ----------------------------
         public static string APPDATA_PATH = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Snowdrop");
 
+
+
         // ----------------------------
-        //       Compression
+        //       COMPRESSION
         // ----------------------------
         public const string COMPRESSION_FORMAT = ".gz";
+
+
 
         // ----------------------------
         //       TEMP
@@ -36,6 +58,6 @@ namespace Snowdrop
         public const string TEMP_FOLDER_NAME = "temp";
         public const string CHECKSUM_NAME = "checksum";
         public const string JSON_NAME = "setting.json";
-        public const string LOG_NAME = "update.log";
+        
     }
 }

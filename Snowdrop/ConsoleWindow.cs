@@ -53,11 +53,12 @@ namespace Snowdrop
                     CompressionUtil.Compress(new FileInfo(directoryInfo.FullName), directoryInfo.FullName.Remove(directoryInfo.FullName.Length - directoryInfo.Name.Length));
                 }
             }
-            catch (Exception ex)
+            catch (FileNotFoundException ex)
             {
-                // Print the exception, this happens if the file specified does not exist.
-                Console.WriteLine(DateTime.Now.ToString("d/M/yyyy HH:mm:ss") + " [Exception] " + ex);
-                LoggingUtil.Exception(String.Format("Argument Exceptiion: {0}", ex));
+                // Show that the file or folder is not 
+                // available anymore or never existed.
+                Console.WriteLine(String.Format("The file or folder \"{0}\" does either not exist or the path is incorrect.", ex.FileName));
+                LoggingUtil.Exception(String.Format("Argument Exception: {0}", ex));
             }
 
             Console.Write("\n");
