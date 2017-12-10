@@ -8,5 +8,8 @@ namespace Snowdrop.json
     {
         public string APPLICATION_VERSION { get; set; }
         public string UPDATE_VERSION { get; set; }
+        public string CHANGELOG { get; set; }
+        public string EVENT { get; set; }
+        public string IMAGE { get; set; }
     }
 }
