@@ -42,11 +42,11 @@ namespace Snowdrop
                     // check if it is a file and compress the file.
                     foreach (FileInfo fileInfo in directoryInfo.GetFiles("*", SearchOption.AllDirectories))
                     {
-                        CompressionUtil.Compress(new FileInfo(fileInfo.FullName), e.Args[0]);
+                        CompressionUtil.Compress(new FileInfo(fileInfo.FullName), e.Args[0].TrimEnd('\\')); // trim '\' at the end of a directory
                     }
 
                     // write the checksum file to the drive
-                    CompressionUtil.WriteFile(e.Args[0]);
+                    CompressionUtil.WriteFile(e.Args[0].TrimEnd('\\'));
                 }
                 else
                 {
