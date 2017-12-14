@@ -28,12 +28,31 @@ The motivation behind Snowdrop is to create a standalone program to download, in
 
 Snowdrop uses the following dependencies
 
-1. Fody - *MIT License* (https://github.com/Fody/Fody/)
-   - Fody is used by costura, see 2. 1. for more informations.
-2. Costura - *MIT License* (https://github.com/Fody/Costura)
+1. Costura - *MIT License* (https://github.com/Fody/Costura)
    - We use costura to embed libraries in our program to allow Snowdrop being standalone.
-3. Newtonsoft.Json - *MIT License* (https://github.com/JamesNK/Newtonsoft.Json)
+
+     - Fody - *MIT License* (https://github.com/Fody/Fody/)
+
+     ​
+
+2. Newtonsoft.Json - *MIT License* (https://github.com/JamesNK/Newtonsoft.Json)
    - Update informations or settings will be saved in the JSON format using Newtonsoft.Json.
+
+   ​
+
+3. Resource.Embedder - *MIT License* (https://gitlab.com/MarcStan/Resource.Embedder)
+
+   - We use Resource.Embedder to embed .resx files into our program to allow Snowdrop being standalone.
+
+   ​
+
+4. Squirrel.Windows - *MIT License* (https://github.com/Squirrel/Squirrel.Windows)
+
+   - An installation and update (to update and install Snowdrop) framework for Windows desktop apps.
+     - Splat - *MIT License* (https://github.com/reactiveui/splat)
+     - SharpCompress - *MIT License* (https://github.com/adamhathcock/sharpcompress)
+     - DeltaCompressionDotNet - *MS-PL License* (https://github.com/taspeotis/DeltaCompressionDotNet)
+     - Mono.Cecil - *MIT License* (https://github.com/jbevain/cecil)
 
 
 

@@ -117,4 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="FOLDER_BROWSER_DIALOG_DESC" xml:space="preserve">
+    <value>Выберите действительный каталог установки, в котором будут установлены файлы.</value>
+  </data>
+  <data name="FOLDER_BROWSER_RESULT_BODY" xml:space="preserve">
+    <value>Вы хотите установить следующую папку в качестве установочной папки, в которой будут установлены все файлы?</value>
+  </data>
+  <data name="FOLDER_BROWSER_RESULT_HEADER" xml:space="preserve">
+    <value>Папка установки</value>
+  </data>
 </root>

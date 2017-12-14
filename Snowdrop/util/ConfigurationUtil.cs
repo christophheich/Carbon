@@ -43,6 +43,8 @@ namespace Snowdrop.util
             // serialize the content to the json format
             // write it as a file into the appdata path
             File.WriteAllText(Path.Combine(Configuration.APPDATA_PATH, Configuration.JSON_NAME), JsonConvert.SerializeObject(ConfigurationJsonModel));
+
+            LoggingUtil.Info("Configuration file has been saved.");
         }
     }
 }

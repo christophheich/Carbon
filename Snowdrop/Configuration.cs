@@ -26,7 +26,13 @@ namespace Snowdrop
         // ----------------------------
         //       LOCALIZATION
         // ----------------------------
-        public static readonly string[] LANGUAGES = { "enu", "deu", "fra", "plk", "rus" };
+        public static readonly string[] LANGUAGES = {
+            "en-US",
+            "de-DE",
+            "fr-FR",
+            "pl-PL",
+            "ru-RU"
+        };
 
 
         // ----------------------------

@@ -523,12 +523,6 @@
             <Image x:Name="Image_Holder" Stretch="UniformToFill" Height="248" Margin="1" Width="398"/>
         </Grid>
 
-        <Label x:Name="Label_Announcement" Content="Snowdrop is a standalone program to download, install and update files it is used for online scenarios to deploy games." HorizontalAlignment="Center" Margin="0,-200,0,0" VerticalAlignment="Center" Foreground="White" FontSize="15" Width="824" Height="30"/>
-
-        <Label x:Name="Label_Status" Content="Downloading..." HorizontalAlignment="Left" Margin="63,0,0,33" VerticalAlignment="Bottom" Foreground="#FF4F9CD1" FontSize="14" Height="30"/>
-
-        <Label x:Name="Label_Percent" Content="100 %" HorizontalAlignment="Left" Margin="13,0,0,33" Foreground="#FFFCFDFD" Width="50" VerticalContentAlignment="Bottom" VerticalAlignment="Bottom" FontSize="14" HorizontalContentAlignment="Center" Height="30"/>
-
         <Button x:Name="Button_Start" Content="Play" HorizontalAlignment="Right" Margin="0,0,10,18" VerticalAlignment="Bottom" Width="200" Height="45" FontSize="26.667" FontWeight="Bold" FontFamily="Arial" Foreground="White" BorderBrush="#FF384A8B">
             <Button.Effect>
                 <DropShadowEffect Opacity="0.25" ShadowDepth="0"/>
@@ -552,8 +546,16 @@
                 <DropShadowEffect Opacity="0.25" ShadowDepth="0"/>
             </Button.Effect>
         </Button>
-
-        <ProgressBar x:Name="ProgressBar_Update" HorizontalAlignment="Left" Height="5" Margin="13,457,0,0" VerticalAlignment="Top" Width="612" Style="{DynamicResource ProgressBarStyle}" Foreground="#FF65A6DB" Background="#FF515879" BorderBrush="Black" BorderThickness="0"/>
+        <Button x:Name="Button_Close" Content="x" HorizontalAlignment="Right" Margin="0,0,3,496" VerticalAlignment="Bottom" Width="21" Height="21" Style="{DynamicResource CloseButtonStyle}" FontFamily="OCR A Std" FontSize="18" >
+            <Button.Effect>
+                <DropShadowEffect Opacity="0.25" ShadowDepth="0"/>
+            </Button.Effect>
+        </Button>
+        <Button x:Name="Button_Minimize" Content="_" HorizontalAlignment="Right" Margin="0,0,25,496" VerticalAlignment="Bottom" Width="21" Height="21" Style="{DynamicResource MinimizeButtonStyle}" FontSize="18" FontFamily="OCR A Std" >
+            <Button.Effect>
+                <DropShadowEffect Opacity="0.25" ShadowDepth="0"/>
+            </Button.Effect>
+        </Button>
 
         <ComboBox x:Name="ComboBox_Language" HorizontalAlignment="Right" Margin="0,65,11,0" VerticalAlignment="Top" Width="150" Height="28" SelectedIndex="0" >
             <ComboBoxItem x:Name="ComboBoxItem_English" Content="English"/>
@@ -562,20 +564,14 @@
             <ComboBoxItem x:Name="ComboBoxItem_Polish" Content="Polski"/>
             <ComboBoxItem x:Name="ComboBoxItem_Russian" Content="Pусский"/>
         </ComboBox>
+        <ProgressBar x:Name="ProgressBar_Update" HorizontalAlignment="Left" Height="5" Margin="13,457,0,0" VerticalAlignment="Top" Width="612" Style="{DynamicResource ProgressBarStyle}" Foreground="#FF65A6DB" Background="#FF515879" BorderBrush="Black" BorderThickness="0"/>
 
         <Label x:Name="Label_Application_Version" Content="Nightly-0.9.8.7" VerticalContentAlignment="Center" HorizontalAlignment="Left" Margin="2,2,0,0" VerticalAlignment="Top" Height="23" Width="150" Background="{x:Null}" Foreground="White" FontSize="10"/>
 
         <Label x:Name="Label_Application_Title" Content="Snowdrop - Download, Install and Update"  VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Margin="0,-492,0,0" Height="23" Width="500" Background="{x:Null}" Foreground="White" FontSize="10" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        <Button x:Name="Button_Repair_Copy" Content="x" HorizontalAlignment="Right" Margin="0,0,3,496" VerticalAlignment="Bottom" Width="21" Height="21" Style="{DynamicResource CloseButtonStyle}" FontFamily="OCR A Std" FontSize="18" >
-            <Button.Effect>
-                <DropShadowEffect Opacity="0.25" ShadowDepth="0"/>
-            </Button.Effect>
-        </Button>
-        <Button x:Name="Button_Repair_Copy1" Content="_" HorizontalAlignment="Right" Margin="0,0,25,496" VerticalAlignment="Bottom" Width="21" Height="21" Style="{DynamicResource MinimizeButtonStyle}" FontSize="18" FontFamily="OCR A Std" >
-            <Button.Effect>
-                <DropShadowEffect Opacity="0.25" ShadowDepth="0"/>
-            </Button.Effect>
-        </Button>
+        <Label x:Name="Label_Announcement" Content="Snowdrop is a standalone program to download, install and update files it is used for online scenarios to deploy games." HorizontalAlignment="Center" Margin="0,-200,0,0" VerticalAlignment="Center" Foreground="White" FontSize="15" Width="824" Height="30"/>
+        <Label x:Name="Label_Status" Content="Downloading..." HorizontalAlignment="Left" Margin="63,0,0,33" VerticalAlignment="Bottom" Foreground="#FF4F9CD1" FontSize="14" Height="30"/>
+        <Label x:Name="Label_Percent" Content="100 %" HorizontalAlignment="Left" Margin="13,0,0,33" Foreground="#FFFCFDFD" Width="50" VerticalContentAlignment="Bottom" VerticalAlignment="Bottom" FontSize="14" HorizontalContentAlignment="Center" Height="30"/>
 
     </Grid>
 </Window>
