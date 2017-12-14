@@ -55,6 +55,7 @@ namespace Snowdrop
         // ----------------------------
         public const string UPDATE_BASE = @"http://download.localhost/";
         public const string UPDATE_FILE_BASE = @"http://download.localhost/client/";
+        public const string APPLICATION_WEBSPACE_JSON_MODEL = @"http://download.localhost/test.json";
 
 
 

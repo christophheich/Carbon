@@ -448,7 +448,7 @@
         </Border>
         <Border x:Name="Border_MainWindow" BorderBrush="#FF465070" BorderThickness="1.5,0,1.5,1.5"/>
 
-        <Grid x:Name="Grid_Update" HorizontalAlignment="Left" Margin="10,0,0,-100" Width="200" Height="250">
+        <Grid x:Name="Grid_Event" HorizontalAlignment="Left" Margin="10,0,0,-100" Width="200" Height="250">
             <Rectangle x:Name="Rectangle_Event_Background" HorizontalAlignment="Center" Margin="0" Width="200" Height="250" VerticalAlignment="Center" Stroke="#FF384A8B">
                 <Rectangle.Effect>
                     <DropShadowEffect ShadowDepth="0" Opacity="0.3"/>
@@ -471,11 +471,15 @@
                 </Rectangle.RenderTransform>
             </Rectangle>
             <Label x:Name="Label_Event_Header" Content="Event" HorizontalAlignment="Left" Margin="10,15,0,0" VerticalAlignment="Top" Foreground="#FFD6DAE9" FontSize="18" FontWeight="Bold"/>
-            <Label x:Name="Label_Event1" Content="Event" HorizontalAlignment="Left" Margin="8,55,-3,0" VerticalAlignment="Top" Foreground="White" Width="185" FontSize="14" Height="30"/>
-            <Label x:Name="Label_Event2" Content="Event" HorizontalAlignment="Left" Margin="8,95,-3,0" VerticalAlignment="Top" Foreground="White" Width="185" FontSize="14" Height="30"/>
-            <Label x:Name="Label_Event3" Content="Event" HorizontalAlignment="Left" Margin="8,135,-3,0" VerticalAlignment="Top" Foreground="White" Width="185" FontSize="14" Height="30"/>
-            <Label x:Name="Label_Event4" Content="Event" HorizontalAlignment="Left" Margin="8,175,-3,0" VerticalAlignment="Top" Foreground="White" Width="185" FontSize="14" Height="30"/>
-            <Label x:Name="Label_Event5" Content="Event" HorizontalAlignment="Left" Margin="8,215,-3,0" VerticalAlignment="Top" RenderTransformOrigin="0.526,0.654" Foreground="White" Width="185" Height="30" FontSize="14"/>
+            <Label x:Name="Label_Event_Body1" HorizontalAlignment="Left" Margin="8,55,-3,0" VerticalAlignment="Top" Foreground="White" Width="185" FontSize="14" Height="30">
+                <Hyperlink NavigateUri="https://github.com/christophheich/Snowdrop" RequestNavigate="Hyperlink_RequestNavigate">
+                    Event
+                </Hyperlink>
+            </Label>
+            <Label x:Name="Label_Event_Body2" Content="Event" HorizontalAlignment="Left" Margin="8,95,-3,0" VerticalAlignment="Top" Foreground="White" Width="185" FontSize="14" Height="30"/>
+            <Label x:Name="Label_Event_Body3" Content="Event" HorizontalAlignment="Left" Margin="8,135,-3,0" VerticalAlignment="Top" Foreground="White" Width="185" FontSize="14" Height="30"/>
+            <Label x:Name="Label_Event_Body4" Content="Event" HorizontalAlignment="Left" Margin="8,175,-3,0" VerticalAlignment="Top" Foreground="White" Width="185" FontSize="14" Height="30"/>
+            <Label x:Name="Label_Event_Body5" Content="Event" HorizontalAlignment="Left" Margin="8,215,-3,0" VerticalAlignment="Top" RenderTransformOrigin="0.526,0.654" Foreground="White" Width="185" Height="30" FontSize="14"/>
         </Grid>
 
         <Grid x:Name="Grid_Changelog" HorizontalAlignment="Right" Margin="0,0,10,-100" Width="200" Height="250">
@@ -501,11 +505,11 @@
                 </Rectangle.RenderTransform>
             </Rectangle>
             <Label x:Name="Label_Changelog_Header" Content="Changelog" HorizontalAlignment="Left" Margin="10,15,0,0" VerticalAlignment="Top" Foreground="#FFD6DAE9" FontSize="18" FontWeight="Bold"/>
-            <Label x:Name="Label_Changelog5" Content="Changelog" HorizontalAlignment="Left" Margin="8,55,0,0" VerticalAlignment="Top" Foreground="White" Width="185" FontSize="14" Height="30"/>
-            <Label x:Name="Label_Changelog4" Content="Changelog" HorizontalAlignment="Left" Margin="8,95,0,0" VerticalAlignment="Top" Foreground="White" Width="185" FontSize="14" Height="30"/>
-            <Label x:Name="Label_Changelog3" Content="Changelog" HorizontalAlignment="Left" Margin="8,135,0,0" VerticalAlignment="Top" Foreground="White" Width="185" FontSize="14" Height="30"/>
-            <Label x:Name="Label_Changelog2" Content="Changelog" HorizontalAlignment="Left" Margin="8,175,0,0" VerticalAlignment="Top" Foreground="White" Width="185" FontSize="14" Height="30"/>
-            <Label x:Name="Label_Changelog1" Content="Changelog" HorizontalAlignment="Left" Margin="8,215,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.526,0.654" Foreground="White" Width="185" Height="30" FontSize="14"/>
+            <Label x:Name="Label_Changelog_Body1" Content="Changelog" HorizontalAlignment="Left" Margin="8,55,0,0" VerticalAlignment="Top" Foreground="White" Width="185" FontSize="14" Height="30"/>
+            <Label x:Name="Label_Changelog_Body2" Content="Changelog" HorizontalAlignment="Left" Margin="8,95,0,0" VerticalAlignment="Top" Foreground="White" Width="185" FontSize="14" Height="30"/>
+            <Label x:Name="Label_Changelog_Body3" Content="Changelog" HorizontalAlignment="Left" Margin="8,135,0,0" VerticalAlignment="Top" Foreground="White" Width="185" FontSize="14" Height="30"/>
+            <Label x:Name="Label_Changelog_Body4" Content="Changelog" HorizontalAlignment="Left" Margin="8,175,0,0" VerticalAlignment="Top" Foreground="White" Width="185" FontSize="14" Height="30"/>
+            <Label x:Name="Label_Changelog_Body5" Content="Changelog" HorizontalAlignment="Left" Margin="8,215,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.526,0.654" Foreground="White" Width="185" Height="30" FontSize="14"/>
         </Grid>
 
         <Grid x:Name="Grid_Image" Margin="0,0,0,-100" Width="400" Height="250" VerticalAlignment="Center" HorizontalAlignment="Center">
@@ -546,18 +550,18 @@
                 <DropShadowEffect Opacity="0.25" ShadowDepth="0"/>
             </Button.Effect>
         </Button>
-        <Button x:Name="Button_Close" Content="x" HorizontalAlignment="Right" Margin="0,0,3,496" VerticalAlignment="Bottom" Width="21" Height="21" Style="{DynamicResource CloseButtonStyle}" FontFamily="OCR A Std" FontSize="18" >
+        <Button x:Name="Button_Close" Content="x" HorizontalAlignment="Right" Margin="0,0,3,496" VerticalAlignment="Bottom" Width="21" Height="21" Style="{DynamicResource CloseButtonStyle}" FontFamily="OCR A Std" FontSize="18" Click="Button_Close_Click" >
             <Button.Effect>
                 <DropShadowEffect Opacity="0.25" ShadowDepth="0"/>
             </Button.Effect>
         </Button>
-        <Button x:Name="Button_Minimize" Content="_" HorizontalAlignment="Right" Margin="0,0,25,496" VerticalAlignment="Bottom" Width="21" Height="21" Style="{DynamicResource MinimizeButtonStyle}" FontSize="18" FontFamily="OCR A Std" >
+        <Button x:Name="Button_Minimize" Content="_" HorizontalAlignment="Right" Margin="0,0,25,496" VerticalAlignment="Bottom" Width="21" Height="21" Style="{DynamicResource MinimizeButtonStyle}" FontSize="18" FontFamily="OCR A Std" Click="Button_Minimize_Click" >
             <Button.Effect>
                 <DropShadowEffect Opacity="0.25" ShadowDepth="0"/>
             </Button.Effect>
         </Button>
 
-        <ComboBox x:Name="ComboBox_Language" HorizontalAlignment="Right" Margin="0,65,11,0" VerticalAlignment="Top" Width="150" Height="28" SelectedIndex="0" >
+        <ComboBox x:Name="ComboBox_Language" HorizontalAlignment="Right" Margin="0,65,11,0" VerticalAlignment="Top" Width="150" Height="28" SelectedIndex="0" DropDownClosed="ComboBox_Language_DropDownClosed" >
             <ComboBoxItem x:Name="ComboBoxItem_English" Content="English"/>
             <ComboBoxItem x:Name="ComboBoxItem_German" Content="Deutsch"/>
             <ComboBoxItem x:Name="ComboBoxItem_French" Content="Français"/>

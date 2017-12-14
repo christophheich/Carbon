@@ -61,6 +61,15 @@ namespace Snowdrop.resources {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Error ähnelt.
+        /// </summary>
+        internal static string ERROR {
+            get {
+                return ResourceManager.GetString("ERROR", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Please select a valid installation directory where the files will be installed. ähnelt.
         /// </summary>
         internal static string FOLDER_BROWSER_DIALOG_DESC {
@@ -84,6 +93,15 @@ namespace Snowdrop.resources {
         internal static string FOLDER_BROWSER_RESULT_HEADER {
             get {
                 return ResourceManager.GetString("FOLDER_BROWSER_RESULT_HEADER", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die An error occured while trying to download or connect to the remotehost, please report this issue to the support. ähnelt.
+        /// </summary>
+        internal static string INITIALIZE_WEBSPACE_JSON_MODEL {
+            get {
+                return ResourceManager.GetString("INITIALIZE_WEBSPACE_JSON_MODEL", resourceCulture);
             }
         }
     }
