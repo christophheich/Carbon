@@ -2,15 +2,22 @@
 // Copyright (c) 2017 Christoph Heich
 // See the LICENSE file in the project root for more information.
 
+using Newtonsoft.Json;
+
 namespace Snowdrop.json
 {
-    class ConfigurationJsonModel
+    public class ConfigurationJsonModel
     {
-        public string BASE_DIRECTORY_PATH { get; set; }
-        public string APPLICATION_VERSION { get; set; }
-        public string UPDATE_VERSION { get; set; }
-        public string LANGUAGE { get; set; }
-        //public string PASSWORD { get; set; }
-        //public string NAME { get; set; }
+        [JsonProperty("BASE_DIRECTORY_PATH")]
+        public string BaseDirectoryPath { get; set; }
+
+        [JsonProperty("APPLICATION_VERSION")]
+        public string ApplicationVersion { get; set; }
+
+        [JsonProperty("UPDATE_VERSION")]
+        public long UpdateVersion { get; set; }
+
+        [JsonProperty("LANGUAGE")]
+        public string Language { get; set; }
     }
 }

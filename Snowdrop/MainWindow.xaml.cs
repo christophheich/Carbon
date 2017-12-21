@@ -25,6 +25,8 @@ namespace Snowdrop
     /// </summary>
     public partial class MainWindow : Window
     {
+        public static System.Timers.Timer aTimer;
+
         // MainWindow Method
         public MainWindow()
         {
@@ -35,68 +37,18 @@ namespace Snowdrop
             InitializeConfiguration();
             InitializeWebspaceJsonModel();
             InitializeApplication();
-
-            // If the host is not available we turn off the process.
-            /*if (HttpUtil.PingHost(Configuration.UPDATE_BASE, 80))
-            {
-                MessageBox.Show("Could not reach the network", "ERROR!");
-                LoggingUtil.Warning("Test");
-                Environment.Exit(0);
-            }*/
-            var uriSource = new Uri(ApplicationManager.Webspace.IMAGE, UriKind.Absolute);
-            Image_Holder.Source = new BitmapImage(uriSource);
-        }
-
-        private void InitializeApplication()
-        {
-            {
-                var events = Grid_Event.Children.OfType<Label>().Where(c => c.Name.StartsWith("Label_Event_Body")).ToList();
-
-                int i = 0;
-                foreach (var item in events)
-                {
-                    try
-                    {
-                        item.Content = ApplicationManager.Webspace.EVENT.Split(',')[i].Truncate(25, "...");
-                    }
-                    catch (Exception ex)
-                    {
-                        LoggingUtil.Exception(ex.Message);
-                        item.Content = String.Empty;
-                    }
-                    i++;
-                }
-            }
-            {
-                var changelog = Grid_Changelog.Children.OfType<Label>().Where(c => c.Name.StartsWith("Label_Changelog_Body")).ToList();
-
-                int i = 0;
-                foreach (var item in changelog)
-                {
-                    try
-                    {
-                        item.Content = ApplicationManager.Webspace.CHANGELOG.Split(',')[i].Truncate(25, "...");
-                    }
-                    catch (Exception ex)
-                    {
-                        LoggingUtil.Exception(ex.Message);
-                        item.Content = String.Empty;
-                    }
-                    i++;
-                }
-            }
         }
 
         // InitializeLocalization Method
         private void InitializeLocalization()
         {
-            if (ConfigurationUtil.ConfigurationJsonModel == null || ConfigurationUtil.ConfigurationJsonModel.LANGUAGE == null || ConfigurationUtil.ConfigurationJsonModel.LANGUAGE == String.Empty)
+            if (ConfigurationUtil.ConfigurationJsonModel == null || ConfigurationUtil.ConfigurationJsonModel.Language == null || ConfigurationUtil.ConfigurationJsonModel.Language == String.Empty)
             {
                 LoggingUtil.Warning("ConfigurationJsonModel was null, LANGUAGE was null or LANGUAGE was empty.");
 
                 ConfigurationUtil.ConfigurationJsonModel = new ConfigurationJsonModel
                 {
-                    LANGUAGE = Configuration.LANGUAGES[0] // Set the default language to english.
+                    Language = Configuration.LANGUAGES[0] // Set the default language to english.
                 };
                 ConfigurationUtil.Save();
             }
@@ -104,13 +56,16 @@ namespace Snowdrop
             {
                 ConfigurationUtil.Load();
 
-                foreach(var language in Configuration.LANGUAGES)
+                int index = 0;
+                foreach (var language in Configuration.LANGUAGES)
                 {
-                    if (ConfigurationUtil.ConfigurationJsonModel.LANGUAGE.Equals(language))
+                    if (ConfigurationUtil.ConfigurationJsonModel.Language.Equals(language))
                     {
                         Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo(language);
+                        ComboBox_Language.SelectedIndex = index;
                         break;
                     }
+                    index++;
                 }
             }
         }
@@ -118,7 +73,7 @@ namespace Snowdrop
         // InitializeConfiguration Method
         private void InitializeConfiguration()
         {
-            if (ConfigurationUtil.ConfigurationJsonModel == null || ConfigurationUtil.ConfigurationJsonModel.BASE_DIRECTORY_PATH == null || ConfigurationUtil.ConfigurationJsonModel.BASE_DIRECTORY_PATH == String.Empty)
+            if (ConfigurationUtil.ConfigurationJsonModel == null || ConfigurationUtil.ConfigurationJsonModel.BaseDirectoryPath == null || ConfigurationUtil.ConfigurationJsonModel.BaseDirectoryPath == String.Empty)
             {
                 LoggingUtil.Warning("ConfigurationJsonModel was null, BASE_DIRECTORY_PATH was null or BASE_DIRECTORY_PATH was empty.");
 
@@ -138,8 +93,8 @@ namespace Snowdrop
                         Environment.Exit(0);
                     }
 
-                    MessageBoxResult messageBoxResult = MessageBox.Show(directoryPath + "\n\n" + ApplicationManager.Localization.GetString("FOLDER_BROWSER_RESULT_BODY"), 
-                        ApplicationManager.Localization.GetString("FOLDER_BROWSER_RESULT_HEADER"), MessageBoxButton.YesNoCancel, MessageBoxImage.None, 
+                    MessageBoxResult messageBoxResult = MessageBox.Show(directoryPath + "\n\n" + ApplicationManager.Localization.GetString("FOLDER_BROWSER_RESULT_BODY"),
+                        ApplicationManager.Localization.GetString("FOLDER_BROWSER_RESULT_HEADER"), MessageBoxButton.YesNoCancel, MessageBoxImage.None,
                         MessageBoxResult.None, MessageBoxOptions.DefaultDesktopOnly);
 
                     if (messageBoxResult == MessageBoxResult.No)
@@ -153,7 +108,7 @@ namespace Snowdrop
                     else
                     {
                         LoggingUtil.Info("The BASE_DIRECTORY_PATH has now a valid value.");
-                        ConfigurationUtil.ConfigurationJsonModel.BASE_DIRECTORY_PATH = directoryPath;
+                        ConfigurationUtil.ConfigurationJsonModel.BaseDirectoryPath = directoryPath;
                         ConfigurationUtil.Save();
                     }
                 }
@@ -180,7 +135,7 @@ namespace Snowdrop
             }
             catch (WebException e)
             {
-                MessageBox.Show(ApplicationManager.Localization.GetString("INITIALIZE_WEBSPACE_JSON_MODEL"), 
+                MessageBox.Show(ApplicationManager.Localization.GetString("INITIALIZE_WEBSPACE_JSON_MODEL"),
                     ApplicationManager.Localization.GetString("ERROR"), MessageBoxButton.OK, MessageBoxImage.Error);
 
                 LoggingUtil.Exception(e.Message);
@@ -188,12 +143,78 @@ namespace Snowdrop
             }
         }
 
+        // InitializeApplication Method
+        private void InitializeApplication()
+        {
+            // set for each event the event information
+            {
+                var events = Grid_Event.Children.OfType<Label>().Where(c => c.Name.StartsWith("Label_Event_Body")).ToList();
+
+                int i = 0;
+                foreach (var item in events)
+                {
+                    try
+                    {
+                        item.Content = ApplicationManager.Webspace.Event[i].Truncate(25, "...");
+                    }
+                    catch (Exception ex)
+                    {
+                        LoggingUtil.Exception(ex.Message);
+                        item.Content = String.Empty;
+                    }
+                    i++;
+                }
+            }
+
+            // set for each changelog the changelog information
+            {
+                var changelog = Grid_Changelog.Children.OfType<Label>().Where(c => c.Name.StartsWith("Label_Changelog_Body")).ToList();
+
+                int i = 0;
+                foreach (var item in changelog)
+                {
+                    try
+                    {
+                        item.Content = ApplicationManager.Webspace.Changelog[i].Truncate(25, "...");
+                    }
+                    catch (Exception ex)
+                    {
+                        LoggingUtil.Exception(ex.Message);
+                        item.Content = String.Empty;
+                    }
+                    i++;
+                }
+            }
+
+            // set announcement
+            Label_Announcement.Content = ApplicationManager.Webspace.Announcement.Truncate(115, "...");
+
+            // set image
+            var imageUriSource = new Uri(ApplicationManager.Webspace.Image[0], UriKind.Absolute);
+            Image_Holder.Source = new BitmapImage(imageUriSource);
+        }
+
+        /*public void SetImage(int i)
+        {
+            Dispatcher.Invoke(new Action(() => {
+                var imageUriSource = new Uri(ApplicationManager.Webspace.Image[i], UriKind.Absolute);
+                Image_Holder.Source = new BitmapImage(imageUriSource);
+            }), DispatcherPriority.Render);
+        }*/
+
         private void ComboBox_Language_DropDownClosed(object sender, EventArgs e)
         {
-            if (ConfigurationUtil.ConfigurationJsonModel.LANGUAGE != Configuration.LANGUAGES[ComboBox_Language.SelectedIndex])
+            if (ConfigurationUtil.ConfigurationJsonModel.Language != Configuration.LANGUAGES[ComboBox_Language.SelectedIndex])
             {
-                ConfigurationUtil.ConfigurationJsonModel.LANGUAGE = Configuration.LANGUAGES[ComboBox_Language.SelectedIndex];
+                ConfigurationUtil.ConfigurationJsonModel.Language = Configuration.LANGUAGES[ComboBox_Language.SelectedIndex];
                 ConfigurationUtil.Save();
+
+                // release the mutex
+                App.mutex.ReleaseMutex();
+
+                // restart a new application and turn off the current
+                System.Windows.Forms.Application.Restart();
+                Application.Current.Shutdown();
             }
         }
 

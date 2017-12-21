@@ -118,6 +118,7 @@
     <Compile Include="Configuration.cs" />
     <Compile Include="ext\StringExtension.cs" />
     <Compile Include="json\ConfigurationJsonModel.cs" />
+    <Compile Include="json\FileJsonModel.cs" />
     <Compile Include="json\WebspaceJsonModel.cs" />
     <Compile Include="lib\AtomicBoolean.cs" />
     <Compile Include="resources\Translation.Designer.cs">
@@ -128,9 +129,9 @@
     <Compile Include="util\ChecksumUtil.cs" />
     <Compile Include="util\CompressionUtil.cs" />
     <Compile Include="util\ConfigurationUtil.cs" />
+    <Compile Include="util\ConnectionUtil.cs" />
     <Compile Include="util\CryptographyUtil.cs" />
     <Compile Include="util\DirectoryUtil.cs" />
-    <Compile Include="util\HttpUtil.cs" />
     <Compile Include="util\LoggingUtil.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -187,9 +188,7 @@
   <ItemGroup>
     <Resource Include="Icon.ico" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="xaml\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">
       <Visible>False</Visible>

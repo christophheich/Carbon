@@ -7,6 +7,7 @@ using Squirrel;
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -23,6 +24,8 @@ namespace Snowdrop
         [DllImport("Kernel32")]
         public static extern void FreeConsole();
 
+        public static Mutex mutex;
+
         /**
          * Handles the application startup, if there are command line arguments 
          * specified the console application will start in administration mode 
@@ -32,25 +35,44 @@ namespace Snowdrop
          */
         private void Application_Startup(object sender, StartupEventArgs startupEventArgs)
         {
-            // run the squirrel update process async in the background
-            Task.Run(async () =>
+            // using mutex to prevent the application startup a second time?
+            if (Configuration.USING_MUTEX)
             {
-                // Initialize Squirrel Update
-                if (Configuration.GITHUB_UPDATE_MANAGER == true)
+                try
                 {
-                    using (var mgr = UpdateManager.GitHubUpdateManager(Configuration.GITHUB_UPDATE_MANAGER_URL))
-                    {
-                        await mgr.Result.UpdateApp();
-                    }
+                    // Try to open existing mutex.
+                    Mutex.OpenExisting(Configuration.MUTEX_NAME);
+                    Environment.Exit(0);
                 }
-                else
+                catch
                 {
-                    using (var mgr = new UpdateManager(Configuration.UPDATE_MANAGER_URL))
-                    {
-                        await mgr.UpdateApp();
-                    }
+                    // If exception occurred, there is no such mutex and we create one.
+                    mutex = new Mutex(true, Configuration.MUTEX_NAME);
                 }
-            }).GetAwaiter().GetResult();
+            }
+
+            // run the squirrel update process async in the background
+            if (Configuration.USING_SQUIRREL_UPDATER == true)
+            {
+                Task.Run(async () =>
+                {
+                    // Initialize Squirrel Update
+                    if (Configuration.GITHUB_UPDATE_MANAGER == true)
+                    {
+                        using (var mgr = UpdateManager.GitHubUpdateManager(Configuration.GITHUB_UPDATE_MANAGER_URL))
+                        {
+                            await mgr.Result.UpdateApp();
+                        }
+                    }
+                    else
+                    {
+                        using (var mgr = new UpdateManager(Configuration.UPDATE_MANAGER_URL))
+                        {
+                            await mgr.UpdateApp();
+                        }
+                    }
+                }).GetAwaiter().GetResult();
+            }
 
 
             // if the log file should be deleted on application startup

@@ -15,20 +15,28 @@ namespace Snowdrop
     {
         // Translation
         private static readonly ResourceManager resourceManager = new ResourceManager("Snowdrop.Resources.Translation", Assembly.GetExecutingAssembly());
-
         public static ResourceManager Localization
         {
-            get => resourceManager;
+            get
+            {
+                return resourceManager;
+            }
         }
 
 
         // Webspace
         private static WebspaceJsonModel webspaceJsonModel = new WebspaceJsonModel();
-
         public static WebspaceJsonModel Webspace
         {
-            get => webspaceJsonModel;
-            set => webspaceJsonModel = value;
+            get
+            {
+                return webspaceJsonModel;
+            }
+
+            set
+            {
+                webspaceJsonModel = value;
+            }
         }
     }
 }

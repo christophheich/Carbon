@@ -3,17 +3,24 @@
 // See the LICENSE file in the project root for more information.
 
 using Newtonsoft.Json;
-using System.IO;
-using System.Net;
 
 namespace Snowdrop.json
 {
     public class WebspaceJsonModel
     {
-        public string UPDATE_VERSION { get; set; }
-        public string ANNOUNCEMENT { get; set; }
-        public string CHANGELOG { get; set; }
-        public string EVENT { get; set; }
-        public string IMAGE { get; set; }
+        [JsonProperty("UPDATE_VERSION")]
+        public string UpdateVersion { get; set; }
+
+        [JsonProperty("ANNOUNCEMENT")]
+        public string Announcement { get; set; }
+
+        [JsonProperty("CHANGELOG")]
+        public string[] Changelog { get; set; }
+
+        [JsonProperty("EVENT")]
+        public string[] Event { get; set; }
+
+        [JsonProperty("IMAGE")]
+        public string[] Image { get; set; }
     }
 }

@@ -2,7 +2,9 @@
 // Copyright (c) 2017 Christoph Heich
 // See the LICENSE file in the project root for more information.
 
-using Snowdrop.lib;
+
+using Newtonsoft.Json;
+using Snowdrop.json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -12,8 +14,7 @@ namespace Snowdrop.util
 {
     class CompressionUtil
     {
-        private static Dictionary<string, string> checksumElements = new Dictionary<string, string>();
-        private static AtomicBoolean checksumCreated = new AtomicBoolean() { Value = false };
+        private static List<FileJsonModel> checksumElements = new List<FileJsonModel>();
 
         public static void WriteFile(string baseFolder)
         {
@@ -22,40 +23,13 @@ namespace Snowdrop.util
 
             using (StreamWriter streamWriter = File.AppendText(Path.Combine(baseFolder, Configuration.TEMP_FOLDER_NAME, Configuration.CHECKSUM_NAME)))
             {
-                // replace the baseFolder from the path
-                // we do not want an absolute path
-                foreach (var element in checksumElements)
-                {
-                    //write every element e.g. Snowdrop.exe;4243342342341sdf
-                    streamWriter.WriteLine(element.Key + ";" + element.Value); 
-                }
+                streamWriter.WriteLine(JsonConvert.SerializeObject(checksumElements.ToArray(), Configuration.JSON_SERIALIZER_SETTING));
             }
         }
 
         // Method for compressing files.
         public static void Compress(FileInfo fileToCompress, string baseFolder)
         {
-            // atomic boolean if the value of 
-            // checksumcreated is false set it to true and continue
-            if (checksumCreated.CompareAndExchange(false, true))
-            {
-                // if the file does exist read the content
-                if (File.Exists(Path.Combine(baseFolder, Configuration.TEMP_FOLDER_NAME, Configuration.CHECKSUM_NAME)))
-                {
-                    using (var streamReader = new StreamReader(Path.Combine(baseFolder, Configuration.TEMP_FOLDER_NAME, Configuration.CHECKSUM_NAME)))
-                    {
-                        String line;
-                        while ((line = streamReader.ReadLine()) != null)
-                        {
-                            // spereate the line by ; to get the path and md5
-                            // add it afterwards to the dictionary
-                            string[] separation = line.Split(';');
-                            checksumElements.Add(separation[0], separation[1]);
-                        }
-                    }
-                }
-            }
-
             try
             {
                 // open the file as a file stream
@@ -75,22 +49,6 @@ namespace Snowdrop.util
 
                         // generate the md5 of the file
                         string hashValue = CryptographyUtil.Md5(File.ReadAllBytes(fileToCompress.FullName));
-
-                        // try to get the value of path (key) and set it to the variable valueKey
-                        // check if the value of the key is not equal to the md5 if so
-                        // delete the value from the dictionary and set the new one
-                        if (checksumElements.TryGetValue(key, out string valueKey)) {
-                            if (valueKey != hashValue)
-                            {
-                                checksumElements.Remove(key);
-                                checksumElements.Add(key, hashValue);
-                            }
-                        }
-                        else 
-                        {
-                            // if there is no key just add the key and value
-                            checksumElements.Add(key, hashValue);
-                        }
 
                         // create the sub-directory in the temp folder 
                         // if it does not exist
@@ -117,6 +75,17 @@ namespace Snowdrop.util
                             FileInfo fileInfo = new FileInfo(Path.Combine(baseFolder, Configuration.TEMP_FOLDER_NAME + fileToCompress.FullName.Replace(baseFolder, "") + Configuration.COMPRESSION_FORMAT));
                             Console.WriteLine("Compressed {0} from {1} to {2} bytes.", fileToCompress.Name, fileToCompress.Length.ToString(), fileInfo.Length.ToString());
                         }
+
+                        // Add to the list each item (file) with the specified values
+                        checksumElements.Add(new FileJsonModel()
+                        {
+                            Name = fileToCompress.Name,
+                            Path = key,
+                            Hash = hashValue,
+                            Date = fileToCompress.CreationTimeUtc.ToUniversalTime().ToString(),
+                            Size = fileToCompress.Length,
+                            Language = null
+                        });
                     }
                 }
             }

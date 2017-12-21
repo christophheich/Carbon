@@ -8,19 +8,28 @@ using System.Net.Sockets;
 
 namespace Snowdrop.util
 {
-    class HttpUtil
+    class ConnectionUtil
     {
         public static bool PingHost(string url, int port)
         {
             try
             {
-                TcpClient client = new TcpClient(url, port);
+                TcpClient client = new TcpClient(url, port)
+                {
+                    SendTimeout = 5
+                };
+
+                if (client.SendTimeout == 5)
+                {
+                    return false;
+                }
+
                 client.Close();
                 return true;
             }
             catch (Exception ex)
             {
-                LoggingUtil.Exception(String.Format("Connection Exception: {0}", ex.Message));
+                LoggingUtil.Exception(String.Format("PingHost Exception: {0}", ex.Message));
                 return false;
             }
         }
